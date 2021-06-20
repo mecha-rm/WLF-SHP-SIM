@@ -11,8 +11,8 @@ public abstract class Animal : Living
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        
+        base.Update();
     }
 }

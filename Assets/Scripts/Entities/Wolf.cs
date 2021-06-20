@@ -21,8 +21,8 @@ public class Wolf : Animal
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
-        
+        base.Update();
     }
 }

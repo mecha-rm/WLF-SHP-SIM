@@ -11,7 +11,7 @@ public class NonLiving : Entity
     }
 
     // Update is called once per frame
-    void Update()
+    protected void Update()
     {
         
     }
