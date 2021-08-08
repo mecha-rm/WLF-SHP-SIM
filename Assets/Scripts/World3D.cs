@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// animal behaviour
-public abstract class Animal : Living
+public class World3D : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -12,8 +11,8 @@ public abstract class Animal : Living
     }
 
     // Update is called once per frame
-    protected void Update()
+    void Update()
     {
-        base.Update();
+        
     }
 }
