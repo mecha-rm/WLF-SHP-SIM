@@ -636,6 +636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 731625123}
   - component: {fileID: 731625124}
+  - component: {fileID: 731625125}
   m_Layer: 0
   m_Name: Wolf
   m_TagString: Untagged
@@ -670,6 +671,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402edb699350fc441aa020799cc771da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &731625125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731625122}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba1bfc74dbfc0947909a6f9faf9ec29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 0}
+  forceMode: 5
+  speed: 25
+  updateBehaviour: 1
+  radius: 25
 --- !u!1 &1402444053
 GameObject:
   m_ObjectHideFlags: 0
