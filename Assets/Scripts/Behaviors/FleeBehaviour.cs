@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // flees an entity
-public class FleeBehaviour : AIBehaviour
+public class FleeBehaviour : SteeringBehaviour
 {
+    // tags of objects recognized as threats
+    public List<string> threatTags = new List<string>();
+
     // view for seeking items
     public SphereCollider view;
 
@@ -12,8 +15,11 @@ public class FleeBehaviour : AIBehaviour
     public GameObject threat;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        // calls base.
+        base.Start();
+
         // if the view is set to null
         if (view == null)
         {
@@ -34,7 +40,7 @@ public class FleeBehaviour : AIBehaviour
     private void OnTriggerStay(Collider other)
     {
         // sets new threat.
-        if (threat == null)
+        if (threat == null && threatTags.Contains(other.tag))
         {
             threat = other.gameObject;
         }
@@ -49,14 +55,16 @@ public class FleeBehaviour : AIBehaviour
             threat = null;
     }
 
-    // Update is called once per frame
-    void Update()
+    // checks to see if the behaviour should be updated.
+    public override bool UpdateAvailable()
     {
-        // TODO: this keeps detecting itself, or the platform below. Make sure to check for proper tags.
+        // if there's a current threat, return true.
+        return (threat != null);
+    }
 
-        // calls update
-        base.Update();
-
+    // updates the behaviour
+    public override void UpdateBehaviour()
+    {
         // target is set.
         if (threat != null)
         {
@@ -67,5 +75,12 @@ public class FleeBehaviour : AIBehaviour
             // adds force to rigid body
             rigidBody.AddForce(direc * speed * Time.deltaTime, forceMode);
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // calls update. If set to do so, this will automatically call 'UpdateBehaviour'.
+        base.Update();
     }
 }
