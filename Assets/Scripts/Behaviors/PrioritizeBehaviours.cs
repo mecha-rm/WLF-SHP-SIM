@@ -7,17 +7,46 @@ public class PrioritizeBehaviours : MonoBehaviour
 {
     // the list of possible behaviours
     // if a behaviour is added to this list, make sure to turn off it's automatic updates.
-    public List<SteeringBehaviour> behaviours;
+    public List<SteeringBehaviour> behaviours = new List<SteeringBehaviour>();
 
     // the behaviour priorities.
     // the lower the number, the higher the priority.
     // if a behaviour's priority is less than 0, then it will never be called.
-    public List<int> priorities;
+    // if priorities aren't set, then the location in the list is used.
+    public List<int> priorities = new List<int>();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        // no behaviours set.
+        if(behaviours.Count == 0)
+        {
+            // gets behaviours and stores them in the list.
+            GetComponents<SteeringBehaviour>(behaviours);
+        }
+
+        // if no priorities are set, match the priorities to the indexes.
+        if(priorities.Count == 0)
+            MatchPrioritiesToIndexes(); // add priorities.
+    }
+
+    // match the priorities 
+    public void MatchPrioritiesToIndexes()
+    {
+        // goes through each behaviour
+        for(int i = 0; i < behaviours.Count; i++)
+        {
+            // no priority set.
+            if(i >= priorities.Count)
+            {
+                priorities.Add(i); // match priority to index.
+            }
+            else
+            {
+                // set priority to place in list.
+                priorities[i] = i;
+            }
+        }
     }
 
     // clears all lists
@@ -58,10 +87,10 @@ public class PrioritizeBehaviours : MonoBehaviour
                     // save priority value.
                     p = priorities[i];
                 }
-                else // adds priority, and makes it 0.
+                else // adds priority, and makes it set to the current index.
                 {
                     p = 0;
-                    priorities.Add(0);
+                    priorities.Add(i); // priority is set to current index.
                 }
 
                 // if the action priority is negative, it means no action has been available yet.
@@ -77,15 +106,15 @@ public class PrioritizeBehaviours : MonoBehaviour
                     actions.Enqueue(behaviour);
                 }
             }
+        }
 
-            // while there are still actions to activate.
-            while(actions.Count >= 0)
-            {
-                SteeringBehaviour sb = actions.Peek(); // get front.
-                actions.Dequeue(); // remove front.
-                sb.UpdateBehaviour(); // updates behaviour
+        // while there are still actions to activate.
+        while (actions.Count > 0)
+        {
+            SteeringBehaviour sb = actions.Peek(); // get front.
+            actions.Dequeue(); // remove front.
+            sb.UpdateBehaviour(); // updates behaviour
 
-            }
         }
     }
 }
