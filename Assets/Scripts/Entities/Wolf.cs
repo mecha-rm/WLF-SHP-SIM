@@ -14,11 +14,24 @@ public class Wolf : Animal
         species = "wolf";
     }
 
-    // gets the life span of the sheep.
-    public override int GetLifeSpan()
+    // reproduces the wolf.
+    private void Reproduce()
     {
-        return LIFE_SPAN;
+
     }
+
+    // wolf has killed something.
+    public override void Kills(GameObject victim)
+    {
+        // throw new System.NotImplementedException();
+    }
+
+    // wolf has been killed.
+    public override void OnKilled(GameObject killer)
+    {
+        // throw new System.NotImplementedException();
+    }
+
 
     // Update is called once per frame
     protected void Update()

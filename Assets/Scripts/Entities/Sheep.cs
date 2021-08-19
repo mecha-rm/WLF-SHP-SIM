@@ -6,18 +6,31 @@ public class Sheep : Animal
 {
     // the life span as a static object.
     // this is the same for all sheep.
-    private static int LIFE_SPAN = 100;
+    private static float LIFE_SPAN = 100.0F;
 
     // Start is called before the first frame update
     void Start()
     {
         species = "sheep";
+        lifeSpan = LIFE_SPAN;
+    }
+    
+    // reproduces the sheep.
+    private void Reproduce()
+    {
+
     }
 
-    // gets the life span of the sheep.
-    public override int GetLifeSpan()
+    // sheep has killed something.
+    public override void Kills(GameObject victim)
     {
-        return LIFE_SPAN;
+        // throw new System.NotImplementedException();
+    }
+
+    // sheep has been killed.
+    public override void OnKilled(GameObject killer)
+    {
+        // throw new System.NotImplementedException();
     }
 
     // Update is called once per frame

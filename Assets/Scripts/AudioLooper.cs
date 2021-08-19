@@ -1,30 +1,27 @@
-﻿// NOTE: this file was taken fom another project. It will be changed somewhat, but be aware that it was based on something else.
+﻿// NOTE: this file was taken from a gorup project. It will be changed somewhat, but be aware that it was based on something else.
 using UnityEngine;
 
-public class AudioLoop : MonoBehaviour
+// audio looping class
+public class AudioLooper : MonoBehaviour
 {
     // audio source
     public AudioSource audioSource = null;
 
-    // start start and end of the audio clip being played. This is in seconds.
-
-    // the start of the clip. If this value is negative, the clip continues like normal.
-    // if clip start is less than 0, then it doesn't function.
+    // the start of the clip. If this value is negative, then the looper will not work.
     public float clipStart = 0.0F;
+
 
     // the end of the clip
     /// <summary>
-    /// * I don't know what happens if the time is set beyond the clip length but I assume it just errors out.
-    /// * on another note that if clipEnd is set to the end of the clip, the song will loop back to the start...
-    /// * instead of looping back to the pre-defined clip start. 
-    /// * so it's best to either have some silence, or continue the file a little longer so that the loop...
-    /// * has time to work properly.
+    /// If clipEnd is set to the end of the audio file, it will ignore clipStart and go back to the start of the audio file.
+    /// To avoid this, make sure clipEnd is not set to the end of the audio file. 
+    /// The best ways to handle this is to have some silence at the end of the file, or have the song loop through.
     /// </summary>
     public float clipEnd = 0.0F;
 
-    // if 'true', a song will be limited to the clip range.
-    // if 'false', the start of the song will play normally,...
-    // but once within the clip range it will stay within the clip.
+    // if 'true', a audio file will play at the start of the clip range upon first being played.
+    // if 'false', the audio file will play from the start of the audio file.
+    //  * in this case, it will loop back to clip start once it reaches clip end.
     public bool playAtClipStart = false;
 
     // Start is called before the first frame update
@@ -114,7 +111,6 @@ public class AudioLoop : MonoBehaviour
     }
 
     // sets the value of clip start in seconds
-    // this only works if the audioClip has been set.
     public void SetClipStartInSeconds(float seconds)
     {
         // if the audio source is null.
@@ -127,23 +123,14 @@ public class AudioLoop : MonoBehaviour
 
 
         // setting value to clip start.
-        clipStart = (seconds >= 0.0F && seconds <= audioSource.clip.length) ? 
-            seconds : clipStart;
+        if(seconds >= 0.0F && seconds <= audioSource.clip.length)
+            clipStart = seconds;
     }
     
     // sets the clip start time as a percentage, with 0 being 0% and 1 being 100%.
-    public void SetClipStartAsPercentage(float t)
+    public void SetClipStartAsPercentage(float p)
     {
-        // if the audio source is null.
-        if (audioSource == null)
-            return;
-
-        // if the audio clip is null.
-        if (audioSource.clip == null)
-            return;
-
-        t = Mathf.Clamp(t, 0.0F, 1.0F);
-        clipStart = Mathf.Lerp(0.0F, audioSource.clip.length, t);
+        SetClipAsPercentage(p, true);
     }
 
     // returns the value of clip end
@@ -171,7 +158,14 @@ public class AudioLoop : MonoBehaviour
     }
 
     // sets the clip end time as a percentage, with 0 being 0% and 1 being 100%.
-    public void SetClipEndAsPercentage(float t)
+    public void SetClipEndAsPercentage(float p)
+    {
+        SetClipAsPercentage(p, false);
+    }
+
+    // sets the clip as a percentage. If setStart is true, clipStart is changed. If false, clipEnd is changed.
+    // since there's only one line of code that's different, this is privately used by the unique functions.
+    private void SetClipAsPercentage(float p, bool setStart)
     {
         // if the audio source is null.
         if (audioSource == null)
@@ -181,8 +175,14 @@ public class AudioLoop : MonoBehaviour
         if (audioSource.clip == null)
             return;
 
-        t = Mathf.Clamp(t, 0.0F, 1.0F);
-        clipEnd = Mathf.Lerp(0.0F, audioSource.clip.length, t);
+        // clamp percentage.
+        p = Mathf.Clamp(p, 0.0F, 1.0F);
+
+        // setting values.
+        if (setStart) // set the start.
+            clipStart = audioSource.clip.length * p;
+        else // set the end
+            clipEnd = audioSource.clip.length * p;
     }
 
     // gets the variable that says whether or not to start the song at the start of the clip.
@@ -218,25 +218,38 @@ public class AudioLoop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // audio source, or the clip are not set.
+        // check if audio source has been set.
         if (audioSource == null)
+        {
+            Debug.LogError("No audio source supplied.");
             return;
+        }
+            
+        // check for if audio clip has been set.
         if (audioSource.clip == null)
+        {
+            Debug.LogError("No audio clip provided.");
             return;
+        }
+            
 
         // clamp clipStart and clipEnd
-        // TODO: see if using if statements is less computationally expensive (2 conditional statements per clamp)
         clipStart = Mathf.Clamp(clipStart, 0.0F, audioSource.clip.length);
         clipEnd = Mathf.Clamp(clipEnd, 0.0F, audioSource.clip.length);
 
         // if the clips are the same, no audio can play.
         if (clipStart == clipEnd)
         {
+            Debug.LogAssertion("The clip start and clip end are the same, so no audio can play.");
             return;
         }
         // if the clip end is greater than the clip start, then the values are swapped.
         else if (clipStart > clipEnd)
         {
+            // message
+            Debug.LogAssertion("Clip end is less than clip start. Swapping values.");
+
+            // swap values
             float temp = clipStart;
             clipStart = clipEnd;
             clipEnd = temp;
@@ -245,26 +258,19 @@ public class AudioLoop : MonoBehaviour
         // if the audio source is playing
         if(audioSource.isPlaying)
         {
-            // this isn't needed since using the Play() function in this class handles this.
-            // puts the audio source at the clip start.
-            // if (audioSource.time < clipStart && !playAtClipStart)
-            //     audioSource.time = clipStart;
-
             // the audioSource has reached the end of the clip.
             if (audioSource.time >= clipEnd)
             {
                 // checks to see if the audio is looping
-                switch(audioSource.loop)
+                if(audioSource.loop) // audio is looping
                 {
-                    case true: // audio is looping
-                        audioSource.time = clipStart;
-                        break;
-
-                    case false: // audio is not looping
-                        // audio is stopped, and returns to clip start.
-                        audioSource.Stop();
-                        audioSource.time = clipStart;
-                        break;
+                    audioSource.time = clipStart;
+                }
+                else // audio is not looping.
+                {
+                    // audio is stopped, and returns to clip start.
+                    audioSource.Stop();
+                    audioSource.time = clipStart;
                 }
             }
         }

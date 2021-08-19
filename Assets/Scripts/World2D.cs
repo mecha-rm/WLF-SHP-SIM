@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// the 2D world. This replicates the 3D world.
 public class World2D : MonoBehaviour
 {
+    // the 3D world that is referenced.
+    public World3D world3D;
+
     // the grid size (x = cols, y = rows)
     public Vector2Int gridSize = new Vector2Int(32, 32);
 
@@ -12,6 +16,11 @@ public class World2D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // finds the 3D world.
+        if (world3D == null)
+            world3D = FindObjectOfType<World3D>();
+
+
         // x = column count
         // y = row count
         arr = new Vector2[gridSize.y, gridSize.x];
