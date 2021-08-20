@@ -23,7 +23,16 @@ public class Grass : Living
     public Vector3 boundsMax = new Vector3(1.0F, 1.0F, 1.0F);
     public Vector3 boundsCenter = new Vector3(0.0F, 0.0F, 0.0F);
 
-    
+    [Header("Grass/Spread")]
+    // grass can spread
+    public bool canSpread = true;
+
+    // time for grass to spread.
+    public float spreadWaitTime = 50.0F;
+
+    // spread timer
+    public float spreadTimer = 0.0F;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +70,7 @@ public class Grass : Living
         // array that represents all 8 possible locations for new grass.
         bool[,] spreadArr = new bool[3, 3];
 
+
         // checks each section.
         // row
         // for(int i = 0; i < spreadArr.Length; i++)
@@ -68,10 +78,39 @@ public class Grass : Living
         //     // col
         //     for(int j = 0; j < spreadArr.GetLength(0); j++)
         //     {
-        // 
+        //        
         //     }
         // }
-        
+
+        // offset for grass
+        Vector3 offset = boundsMax - boundsCenter;
+
+        // x (horizontal)
+        for (int x = -1; x < 1; x++)
+        {
+            // z (vertical)
+            for (int z = -1; z < 1; z++)
+            {
+                // current location.
+                if (x == 0 && z == 0)
+                    continue;
+
+                // calculates next position and farthest point.
+                Vector3 nextPos = transform.position + new Vector3(offset.x * x, 0.0F, offset.z * z);
+                Vector3 FarthestPoint = nextPos + new Vector3(offset.x * x, 0.0F, offset.z * z);
+
+                // checks farthest point to see if it's in the world bounds.
+                if(world.InWorldBounds(FarthestPoint))
+                {
+                    // TODO: check for collision with other grass.
+                    Grass grass = EntityManager.GetInstance().CreateGrass();
+
+                    // puts grass in next position.
+                    if (grass != null)
+                        grass.transform.position = nextPos;
+                }
+            }
+        }
 
     }
 

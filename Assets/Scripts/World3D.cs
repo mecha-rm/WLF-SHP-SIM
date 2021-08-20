@@ -38,6 +38,16 @@ public class World3D : MonoBehaviour
         return (2 * transform.position + boundsMin + boundsMax) / 2.0F;
     }
 
+    // check to see if the position is within the world bounds.
+    public bool InWorldBounds(Vector3 pos)
+    {
+        return (
+            pos.x >= boundsMin.x && pos.x <= boundsMax.x &&
+            pos.y >= boundsMin.y && pos.y <= boundsMax.y &&
+            pos.z >= boundsMin.z && pos.z <= boundsMax.z
+            );
+    }
+
     // Update is called once per frame
     void Update()
     {
