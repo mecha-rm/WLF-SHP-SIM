@@ -8,6 +8,8 @@ public class Wolf : Animal
     // this is the same for all wolves.
     private static int LIFE_SPAN = 100;
 
+    float time = 0.0F;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,9 +17,13 @@ public class Wolf : Animal
     }
 
     // reproduces the wolf.
-    private void Reproduce()
+    protected override void Reproduce()
     {
+        Wolf wolf = EntityManager.GetInstance().GetWolf();
+        wolf.transform.position = transform.position;
 
+        // TODO: change position.
+        wolf.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
     // wolf has killed something.
@@ -37,5 +43,13 @@ public class Wolf : Animal
     protected void Update()
     {
         base.Update();
+
+        time += Time.deltaTime;
+        if(time > 5.0F)
+        {
+            Reproduce();
+            time = 0.0F;
+        }
+            
     }
 }

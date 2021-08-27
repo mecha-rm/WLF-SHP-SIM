@@ -9,9 +9,15 @@ public class World3D : MonoBehaviour
     public Vector3 boundsMin = new Vector3(-50.0F, -50.0F, -50.0F);
     public Vector3 boundsMax = new Vector3(50.0F, 50.0F, 50.0F);
 
+    // public Vector2Int gridSize;
+    // private bool[,] grid;
+
     // Start is called before the first frame update
     void Start()
     {
+        // gridSize.x = Mathf.Abs(gridSize.x);
+        // gridSize.y = Mathf.Abs(gridSize.y);
+        // grid = new bool[gridSize.x, gridSize.y];
     }
 
     // gets the center of the world.

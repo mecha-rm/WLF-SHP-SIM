@@ -11,6 +11,9 @@ public abstract class Living : Entity
     // the species of the living entity.
     protected string species = "";
 
+    // sex of the living thing
+    public enum sex { unknown, male, female }
+
     // lifespan and age
     /*
      * Lifespan is the maximum amount of years something can live.

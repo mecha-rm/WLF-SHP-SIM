@@ -16,9 +16,13 @@ public class Sheep : Animal
     }
     
     // reproduces the sheep.
-    private void Reproduce()
+    protected override void Reproduce()
     {
+        Sheep sheep = EntityManager.GetInstance().GetSheep();
+        sheep.transform.position = transform.position;
 
+        // TODO: change position.
+        sheep.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
     // sheep has killed something.
