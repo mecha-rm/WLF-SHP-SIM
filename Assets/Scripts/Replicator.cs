@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // makes a line of copies of a provided object. This is based on the 'Array' modifier in Blender.
+// TODO: maybe make it so that you can make a copy of a copy?
 public class Replicator : MonoBehaviour
 {
     // the direction of the replicator.
@@ -10,7 +11,7 @@ public class Replicator : MonoBehaviour
 
     // NOTE: to avoid an infinite loop, this script must be attached to the object being replicated.
     // the original that is being replicated.
-    // [Tooltip("The original object being replicated. If left as null, it is set to the object it's attached to.")]
+    [Tooltip("The original object being replicated. If left as null, it is set to the object it's attached to.")]
     private Replicator original = null;
 
     [Tooltip("The number of the generated copy. The original has an 'iteration' of 0.")]
@@ -115,10 +116,10 @@ public class Replicator : MonoBehaviour
             }
 
             // spaces out the copy.
-            copy.transform.position += direc * spacing * i;
+            copy.transform.position += (direc + offset).normalized * spacing * i;
 
             // translates the copy by the offset.
-            copy.transform.Translate(offset);
+            // copy.transform.Translate(offset);
         }
     }
 }
