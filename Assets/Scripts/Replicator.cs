@@ -14,6 +14,10 @@ public class Replicator : MonoBehaviour
     [Tooltip("The original object being replicated. If left as null, it is set to the object it's attached to.")]
     private Replicator original = null;
 
+    // if 'true', the original is used as the object's parent.
+    [Tooltip("If true, the copies have the original as their parent transform.")]
+    public bool originalAsParent = false;
+
     [Tooltip("The number of the generated copy. The original has an 'iteration' of 0.")]
     public uint iteration = 0;
 
@@ -44,7 +48,7 @@ public class Replicator : MonoBehaviour
     public bool triggerOnStart = true;
 
     // Awake is called when the script instance is being loaded.
-    private void Awake()
+    protected virtual void Awake()
     {
         // original not set.
         if (original == null)
@@ -52,15 +56,62 @@ public class Replicator : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         // calls for replication.
         if(triggerOnStart && iteration == 0 && totalIterations != 0)
             Replicate();
     }
 
+    // returns original object.
+    public Replicator Original
+    {
+        get
+        {
+            return original;
+        }
+    }
+
+    // gets the direction the replicas will go in.
+    public Vector3 GetDirection()
+    {
+        // the direction
+        Vector3 direc;
+
+        // chooses the direction.
+        switch (direction)
+        {
+            default:
+            case repDirec.PositiveX: // +x
+                direc = (relativeToOriginal) ? original.transform.right : Vector3.right;
+                break;
+
+            case repDirec.NegativeX: // -x
+                direc = (relativeToOriginal) ? -original.transform.right : Vector3.left;
+                break;
+
+            case repDirec.PositiveY: // +y
+                direc = (relativeToOriginal) ? original.transform.up : Vector3.up;
+                break;
+
+            case repDirec.NegativeY: // -y
+                direc = (relativeToOriginal) ? -original.transform.up : Vector3.down;
+                break;
+
+            case repDirec.PositiveZ: // +z
+                direc = (relativeToOriginal) ? original.transform.forward : Vector3.forward;
+                break;
+
+            case repDirec.NegativeZ: // -z
+                direc = (relativeToOriginal) ? -original.transform.forward : Vector3.back;
+                break;
+        }
+
+        return direc;
+    }
+
     // replicates the object.
-    public void Replicate()
+    public virtual void Replicate()
     {
         // no object to copy
         if(original == null)
@@ -84,42 +135,17 @@ public class Replicator : MonoBehaviour
             copy.iteration = i; // marks iteraton.
 
             // the direction
-            Vector3 direc;
-            
-            // chooses the direction.
-            switch(direction)
-            {
-                default:
-                case repDirec.PositiveX: // +x
-                    direc = (relativeToOriginal) ? original.transform.right : Vector3.right;
-                    break;
-
-                case repDirec.NegativeX: // -x
-                    direc = (relativeToOriginal) ? -original.transform.right  : Vector3.left;
-                    break;
-
-                case repDirec.PositiveY: // +y
-                    direc = (relativeToOriginal) ? original.transform.up : Vector3.up;
-                    break;
-
-                case repDirec.NegativeY: // -y
-                    direc = (relativeToOriginal) ? -original.transform.up : Vector3.down;
-                    break;
-
-                case repDirec.PositiveZ: // +z
-                    direc = (relativeToOriginal) ? original.transform.forward : Vector3.forward;
-                    break;
-
-                case repDirec.NegativeZ: // -z
-                    direc = (relativeToOriginal) ? -original.transform.forward : Vector3.back;
-                    break;
-            }
+            Vector3 direc = GetDirection();
 
             // spaces out the copy.
-            copy.transform.position += (direc + offset).normalized * spacing * i;
+            copy.transform.position += direc.normalized * spacing * i;
 
             // translates the copy by the offset.
-            // copy.transform.Translate(offset);
+            copy.transform.Translate(offset * i);
+
+            // if the parent is the parent.
+            if (originalAsParent)
+                copy.transform.parent = original.transform;
         }
     }
 }
