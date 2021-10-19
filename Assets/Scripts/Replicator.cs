@@ -110,6 +110,55 @@ public class Replicator : MonoBehaviour
         return direc;
     }
 
+    // NOTE: these functions were made for generating iteraitons.
+    // Ideally, if possible these functions will be implemented for optimization.
+    // However, for now they serve no purpose.
+    // generate copies of base object. The baseObject doubles of the potential parent.
+    // protected void GenerateIterations(Replicator baseObject)
+    // {
+    //     GenerateIterations(baseObject, baseObject.transform);
+    // }
+    // 
+    // // generates the iterations. Provide base object and potentiational parent.
+    // protected void GenerateIterations(Replicator baseObject, Transform parent)
+    // {
+    //     // no object to copy
+    //     if (baseObject == null)
+    //     {
+    //         Debug.LogAssertion("No original set. Cannot copy null object.");
+    //         return;
+    //     }
+    // 
+    //     // not the original
+    //     if (iteration != 0)
+    //     {
+    //         Debug.LogAssertion("Can only copy from the original.");
+    //         return;
+    //     }
+    // 
+    //     // make iterations
+    //     for (uint i = 1; i <= totalIterations; i++)
+    //     {
+    //         // makes copy.
+    //         Replicator copy = Instantiate(baseObject);
+    //         copy.iteration = i; // marks iteraton.
+    // 
+    //         // the direction
+    //         Vector3 direc = GetDirection();
+    // 
+    //         // spaces out the copy.
+    //         copy.transform.position += direc.normalized * spacing * i;
+    // 
+    //         // translates the copy by the offset.
+    //         copy.transform.Translate(offset * i);
+    // 
+    //         // if the parent is the parent.
+    //         if (originalAsParent)
+    //             copy.transform.parent = parent;
+    //     }
+    // 
+    // }
+
     // replicates the object.
     public virtual void Replicate()
     {
@@ -119,33 +168,36 @@ public class Replicator : MonoBehaviour
             Debug.LogAssertion("No original set. Cannot copy null object.");
             return;
         }
-
+        
         // not the original
         if(iteration != 0)
         {
             Debug.LogAssertion("Can only copy from the original.");
             return;
         }
-
+        
         // make iterations
         for(uint i = 1; i <= totalIterations; i++)
         {
             // makes copy.
             Replicator copy = Instantiate(original);
             copy.iteration = i; // marks iteraton.
-
+        
             // the direction
             Vector3 direc = GetDirection();
-
+        
             // spaces out the copy.
             copy.transform.position += direc.normalized * spacing * i;
-
+        
             // translates the copy by the offset.
             copy.transform.Translate(offset * i);
-
+        
             // if the parent is the parent.
             if (originalAsParent)
                 copy.transform.parent = original.transform;
         }
+
+        // generates the iterations.
+        // GenerateIterations(original, original.transform);
     }
 }
