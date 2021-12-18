@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // replicates the mesh filter, mesh renderer, transform, animator, and animation only, igorning everything else.
+// TODO: this probably shouldn't be used.
 public class ReplicatorMesh : Replicator
 {
     // orig
@@ -22,6 +23,8 @@ public class ReplicatorMesh : Replicator
     // replication function.
     public override void Replicate()
     {
+        // TODO: this needs to be reworked. It's super inefficient.
+
         // no mesh to copy
         if (meshRenderer == null)
         {
@@ -34,6 +37,25 @@ public class ReplicatorMesh : Replicator
         {
             Debug.LogAssertion("Can only copy from the original.");
             return;
+        }
+
+        // the index of this replicator in the component list of replicators.
+        int repIndex = -1;
+
+        // disables the replicators that have already been gone through.
+        {
+            // gets all replicators
+            Replicator[] reps = gameObject.GetComponents<Replicator>();
+
+            // disables all replicators that have already won.
+            for (int i = 0; i < reps.Length; i++)
+            {
+                repIndex = i;
+
+                // finds the index  of the current replicator.
+                if (reps[i] == this)
+                    break;
+            }
         }
 
         // OBJECTS //
@@ -68,13 +90,34 @@ public class ReplicatorMesh : Replicator
         
             if (i == 1) // use base mesh.
                 copy = meshObject;
-        
+
+            // disables used replicator components by setting 'allowReplications' on them to 'false'.
+            {
+                // grabs the replications from the copy.
+                Replicator[] copyReps = copy.gameObject.GetComponents<Replicator>();
+
+                // stops used replications form being used.
+                for (int j = 0; j < repIndex; j++)
+                    copyReps[j].allowReplications = false;
+            }
+
             // the direction
             Vector3 direc = GetDirection();
-        
+
             // spaces out the copy.
-            copy.transform.position += direc.normalized * spacing * i;
-        
+            if (applyScaleForSpacing) // account for object's scale
+            {
+                // calculates hte direction by the object's scale.
+                Vector3 direcScaled = direc.normalized;
+                direcScaled.Scale(transform.localScale);
+
+                copy.transform.position += direcScaled * spacing * i;
+            }
+            else // ignore object's scale
+            {
+                copy.transform.position += direc.normalized * spacing * i;
+            }
+
             // translates the copy by the offset.
             copy.transform.Translate(offset * i);
         

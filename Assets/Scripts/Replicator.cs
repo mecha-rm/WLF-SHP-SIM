@@ -50,8 +50,18 @@ public class Replicator : MonoBehaviour
     [Tooltip("Offsets the position of the copy after 'spacing' is applied.")]
     public Vector3 offset = new Vector3(0.0F, 0.0F, 0.0F);
 
+    [Header("Process")]
+
     // if 'true', the repliction is triggered at the start.
+    [Tooltip("If 'true', the replication process is called from the start.")]
     public bool triggerOnStart = true;
+
+    [Tooltip("If set to 'true', the replicator's replication is enabled.")]
+    // this is here to prevent infinite replications from happening.
+    // if you attach two replicators to one object they will copy indefinitely.
+    // to prevent this, ths variable is used to stop all replicators that have already run.
+    // this way, copies will not re-use replicators that are already done.
+    public bool allowReplications = true;
 
     // Awake is called when the script instance is being loaded.
     protected virtual void Awake()
@@ -177,6 +187,14 @@ public class Replicator : MonoBehaviour
     // replicates the object.
     public virtual void Replicate()
     {
+        // if the replication function is disabled.
+        if(!allowReplications)
+        {
+            // taken out because it would print too many times.
+            // Debug.Log("Replications are not allowed.");
+            return;
+        }
+
         // no object to copy
         if(original == null)
         {
@@ -190,14 +208,44 @@ public class Replicator : MonoBehaviour
             Debug.LogAssertion("Can only copy from the original.");
             return;
         }
+
+        // the index of this replicator in the component list of replicators.
+        int repIndex = -1;
         
+        // disables the replicators that have already been gone through.
+        {
+            // gets all replicators
+            Replicator[] reps = gameObject.GetComponents<Replicator>();
+        
+            // disables all replicators that have already won.
+            for(int i = 0; i < reps.Length; i++)
+            {
+                repIndex = i;
+
+                // finds the index  of the current replicator.
+                if (reps[i] == this)
+                    break;
+            }
+        }
+
+
         // make iterations
         for(uint i = 1; i <= totalIterations; i++)
         {
             // makes copy.
             Replicator copy = Instantiate(original);
             copy.iteration = i; // marks iteraton.
-        
+
+            // disables used replicator components by setting 'allowReplications' on them to 'false'.
+            {
+                // grabs the replications from the copy.
+                Replicator[] copyReps = copy.gameObject.GetComponents<Replicator>();
+            
+                // stops used replications form being used.
+                for (int j = 0; j < repIndex; j++)
+                    copyReps[j].allowReplications = false;
+            }
+
             // the direction
             Vector3 direc = GetDirection();
         
@@ -222,6 +270,8 @@ public class Replicator : MonoBehaviour
             // if the parent is the parent.
             if (originalAsParent)
                 copy.transform.parent = original.transform;
+
+
         }
 
         // generates the iterations.

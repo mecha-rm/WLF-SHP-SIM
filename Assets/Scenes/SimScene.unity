@@ -596,7 +596,7 @@ Grid:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 194956416}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CellSize: {x: 1, y: 1, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 0
@@ -1834,8 +1834,11 @@ PrefabInstance:
       propertyPath: totalIterations
       value: 19
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 9001935732759342859, guid: 834165699a16cb5459a257e953802df2, type: 3}
+    - target: {fileID: 9001935732759342859, guid: 834165699a16cb5459a257e953802df2, type: 3}
+      propertyPath: totalIterations
+      value: 19
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 834165699a16cb5459a257e953802df2, type: 3}
 --- !u!4 &2463667102950679742 stripped
 Transform:
