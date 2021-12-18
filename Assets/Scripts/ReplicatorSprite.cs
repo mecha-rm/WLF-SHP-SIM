@@ -127,10 +127,10 @@ public class ReplicatorSprite : Replicator
             {
                 copy.transform.parent = spriteRenderer.gameObject.transform;
             }
-            else if (keepOriginalParent) // keep the original's parent object.
-            {
-                copy.transform.parent = spriteRenderer.transform;
-            }
+            // else if (keepOriginalParent) // keep the original's parent object.
+            // {
+            //     copy.transform.parent = spriteRenderer.transform;
+            // }
         }
 
         // GenerateIterations(this, meshRenderer.gameObject.transform);

@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalAsParent: 0
+  keepOriginalParent: 1
   totalIterations: 0
   direction: 0
   relativeToOriginal: 1
@@ -101,6 +102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalAsParent: 0
+  keepOriginalParent: 1
   totalIterations: 0
   direction: 5
   relativeToOriginal: 1

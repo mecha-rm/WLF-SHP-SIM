@@ -18,9 +18,10 @@ public class Replicator : MonoBehaviour
     [Tooltip("If true, the copies have the original as their parent transform.")]
     public bool originalAsParent = false;
 
+    // TODO: doesn't work.
     // if 'true', the orginal parent is kept.
-    [Tooltip("If true, the original's parent is used. If the original should be the parent, that takes priority.")]
-    public bool keepOriginalParent = false;
+    // [Tooltip("If true, the original's parent is used. If the original should be the parent, that takes priority.")]
+    // public bool keepOriginalParent = false;
 
     // the inspector shouldn't be able to change the iteration.
     // [HideInInspector] (use this to hide it in the inspector)
@@ -276,10 +277,10 @@ public class Replicator : MonoBehaviour
             {
                 copy.transform.parent = original.gameObject.transform;
             }
-            else if(keepOriginalParent) // keep the original's parent object.
-            {
-                copy.transform.parent = original.transform;
-            }
+            // else if(keepOriginalParent) // keep the original's parent object.
+            // {
+            //     copy.transform.parent = original.transform;
+            // }
 
 
         }

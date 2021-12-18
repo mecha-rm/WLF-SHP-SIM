@@ -126,10 +126,10 @@ public class ReplicatorMesh : Replicator
             {
                 copy.transform.parent = original.gameObject.transform;
             }
-            else if (keepOriginalParent) // keep the original's parent object.
-            {
-                copy.transform.parent = original.transform;
-            }
+            // else if (keepOriginalParent) // keep the original's parent object.
+            // {
+            //     copy.transform.parent = original.transform;
+            // }
         }
 
         // GenerateIterations(this, meshRenderer.gameObject.transform);

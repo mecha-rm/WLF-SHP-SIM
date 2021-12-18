@@ -1847,7 +1847,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8740162727758233857, guid: 834165699a16cb5459a257e953802df2, type: 3}
       propertyPath: totalIterations
-      value: 19
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8740162727758233860, guid: 834165699a16cb5459a257e953802df2, type: 3}
       propertyPath: m_Name
@@ -1855,7 +1855,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8740162727758233862, guid: 834165699a16cb5459a257e953802df2, type: 3}
       propertyPath: totalIterations
-      value: 19
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8740162727758233863, guid: 834165699a16cb5459a257e953802df2, type: 3}
       propertyPath: m_RootOrder
