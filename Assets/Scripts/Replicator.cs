@@ -18,8 +18,10 @@ public class Replicator : MonoBehaviour
     [Tooltip("If true, the copies have the original as their parent transform.")]
     public bool originalAsParent = false;
 
+    // the inspector shouldn't be able to change the iteration.
+    // [HideInInspector] (use this to hide it in the inspector)
     [Tooltip("The number of the generated copy. The original has an 'iteration' of 0.")]
-    public uint iteration = 0;
+    protected uint iteration = 0;
 
     // the total amount of iterations that will occur. This is irrelevant for anyone but iteration 0.
     [Tooltip("The total amount of iterations to do. This is only relevant to iteration 0.")]
@@ -39,6 +41,10 @@ public class Replicator : MonoBehaviour
     // spacing of the object.
     [Tooltip("The spacing between the copies along the set direction.")]
     public float spacing = 1.0F;
+
+    // if 'true' apply the object scale for spacing.
+    [Tooltip("Apply the scale factor when spacing out iterations.")]
+    public bool applyScaleForSpacing = true;
 
     // replication offsets
     [Tooltip("Offsets the position of the copy after 'spacing' is applied.")]
@@ -69,6 +75,15 @@ public class Replicator : MonoBehaviour
         get
         {
             return original;
+        }
+    }
+
+    // returns the iteration number of the variable.
+    public uint Iteration
+    {
+        get
+        {
+            return iteration;
         }
     }
 
@@ -187,8 +202,20 @@ public class Replicator : MonoBehaviour
             Vector3 direc = GetDirection();
         
             // spaces out the copy.
-            copy.transform.position += direc.normalized * spacing * i;
-        
+            if(applyScaleForSpacing) // account for object's scale
+            {
+                // calculates hte direction by the object's scale.
+                Vector3 direcScaled = direc.normalized;
+                direcScaled.Scale(transform.localScale);
+
+                copy.transform.position += direcScaled * spacing * i;
+            }  
+            else // ignore object's scale
+            {
+                copy.transform.position += direc.normalized * spacing * i;
+            }
+                
+
             // translates the copy by the offset.
             copy.transform.Translate(offset * i);
         
