@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8740162727758233862}
   m_Layer: 0
   m_Name: Grass
-  m_TagString: Untagged
+  m_TagString: Grass
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,7 +65,7 @@ MonoBehaviour:
   description: Food object eaten by sheep.
   stage0Model: {fileID: 8740162729158303881}
   stage1Model: {fileID: 8740162729319923466}
-  growthTime: 0
+  growthTime: 10
   growthTimeMax: 10
 --- !u!114 &8740162727758233857
 MonoBehaviour:

@@ -97,7 +97,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063144697243864}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a1e1cd7bfb5bdbd48a2f3a67cbe831f2, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -117,7 +117,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1063144697243872
 MonoBehaviour:
@@ -131,10 +131,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8f36f552b35144a9795987d64bbb3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityName: 
+  description: 
   lifeSpan: 10
-  lifeExpect: 0
   age: 0
   aging: 1
+  birthTimer: 0
+  birthTimeMax: 5
+  foodSeek: {fileID: 1063144697243887}
+  nourishedValue: 0
+  fullThreshold: 80
+  nourishedMax: 100
   sick: 0
 --- !u!114 &1063144697243886
 MonoBehaviour:
@@ -168,6 +175,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 10
   autoUpdateBehaviour: 0
+  activeBehaviour: 1
   radius: 25
   randX: 1
   randY: 1
@@ -191,6 +199,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 500
   autoUpdateBehaviour: 0
+  activeBehaviour: 1
   threatTags:
   - Wolf
   view: {fileID: 1063144697243873}
@@ -211,6 +220,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 500
   autoUpdateBehaviour: 1
+  activeBehaviour: 1
   targetTags:
   - Grass
   view: {fileID: 1063144697243873}

@@ -12,7 +12,7 @@ public class Grass : Entity
     public GameObject stage1Model;
 
     // how long the grass has been growing for.
-    public float growthTime = 0.0F;
+    public float growthTime = 10.0F;
 
     // the amount of time it takes for the grass to grow.
     // at this stage, the grass can be eaten.
@@ -28,10 +28,29 @@ public class Grass : Entity
         // if the description is blank.
         if(description == "")
             description = "a section of grass that replenishes after a certain period of time.";
+
+
+        // switch model based on growth value.
+        if (stage0Model != null && stage1Model != null)
+        {
+            // fully grown.
+            if(growthTime >= growthTimeMax)
+            {
+                stage0Model.SetActive(false);
+                stage1Model.SetActive(true);
+            }
+            else // still growing.
+            {
+                stage1Model.SetActive(false);
+                stage0Model.SetActive(true);
+            }
+            
+        }
     }
 
     // if this full grown grass?
-    public bool IsFullGrown()
+    // TODO: for the future, change this to "IsEditable()" so that the grass size can be taken into account.
+    public bool IsEdible()
     {
         return growthTime >= growthTimeMax;
     }

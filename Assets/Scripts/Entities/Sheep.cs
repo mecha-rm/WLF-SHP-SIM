@@ -21,7 +21,69 @@ public class Sheep : Animal
             description = "Prey species that feeds on grass.";
 
     }
+
+    // called when the sheep is colliding with something.
+    private void OnTriggerStay(Collider other)
+    {
+        // if the object is grass.
+        if(other.gameObject.tag == "Grass" && IsHungry())
+        {
+            // grabs component.
+            Grass grass = other.gameObject.GetComponent<Grass>();
+
+            // component found.
+            if(grass != null)
+            {
+                // checks if the grass is fully edible.
+                if(grass.IsEdible())
+                {
+                    // eats the grass.
+                    EatGrass(grass);
+                }
+            }
+        }
+    }
+
+    // eats grass.
+   
+    public void EatGrass(Grass grass)
+    {
+        // adds to nourishment value.
+        // TODO: this value should not be hardcoded.
+        nourishedValue += 10.0F;
+
+        // checks for hunger.
+        IsHungry();
+
+        // tells grass its been eaten.
+        grass.Eaten();
+    }
     
+    // calculates the hunger
+    public void CalculateHungry()
+    {
+        // returned value.
+        bool hungry = false;
+
+        // caps value.
+        nourishedValue = Mathf.Clamp(nourishedValue, 0.0F, nourishedMax);
+
+        // checks result.
+        hungry = !(nourishedValue < fullThreshold);
+
+        // checks if hungry. If so, start looking for food. If not, stop.
+        if (hungry && foodSeek != null)
+            foodSeek.activeBehaviour = true;
+        else if (!hungry && foodSeek != null)
+            foodSeek.activeBehaviour = false;
+    }
+
+    // checks to see if the sheep is hungry.
+    public bool IsHungry()
+    {
+        return nourishedValue < fullThreshold;
+    }
+
     // reproduces the sheep.
     protected override void Reproduce()
     {
@@ -32,14 +94,8 @@ public class Sheep : Animal
         sheep.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
-    // sheep has killed something (eaten grass).
-    public override void Kills(GameObject victim)
-    {
-        // throw new System.NotImplementedException();
-    }
-
     // sheep has been killed.
-    public override void OnKilled(GameObject killer)
+    public override void OnDeath(GameObject killer)
     {
         // throw new System.NotImplementedException();
     }

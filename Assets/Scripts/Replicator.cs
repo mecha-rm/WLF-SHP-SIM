@@ -12,11 +12,15 @@ public class Replicator : MonoBehaviour
     // NOTE: to avoid an infinite loop, this script must be attached to the object being replicated.
     // the original that is being replicated.
     [Tooltip("The original object being replicated. If left as null, it is set to the object it's attached to.")]
-    private Replicator original = null;
+    protected Replicator original = null;
 
     // if 'true', the original is used as the object's parent.
     [Tooltip("If true, the copies have the original as their parent transform.")]
     public bool originalAsParent = false;
+
+    // if 'true', the orginal parent is kept.
+    [Tooltip("If true, the original's parent is used. If the original should be the parent, that takes priority.")]
+    public bool keepOriginalParent = false;
 
     // the inspector shouldn't be able to change the iteration.
     // [HideInInspector] (use this to hide it in the inspector)
@@ -269,7 +273,13 @@ public class Replicator : MonoBehaviour
         
             // if the parent is the parent.
             if (originalAsParent)
+            {
+                copy.transform.parent = original.gameObject.transform;
+            }
+            else if(keepOriginalParent) // keep the original's parent object.
+            {
                 copy.transform.parent = original.transform;
+            }
 
 
         }

@@ -120,10 +120,16 @@ public class ReplicatorMesh : Replicator
 
             // translates the copy by the offset.
             copy.transform.Translate(offset * i);
-        
+
             // if the parent is the parent.
             if (originalAsParent)
-                copy.transform.parent = meshRenderer.gameObject.transform;
+            {
+                copy.transform.parent = original.gameObject.transform;
+            }
+            else if (keepOriginalParent) // keep the original's parent object.
+            {
+                copy.transform.parent = original.transform;
+            }
         }
 
         // GenerateIterations(this, meshRenderer.gameObject.transform);

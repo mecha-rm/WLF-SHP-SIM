@@ -42,6 +42,20 @@ public abstract class Animal : Entity
     // maximum amount of time for giving birth.
     public float birthTimeMax = 5.0F;
 
+    [Header("Eating")]
+
+    // behaviour for seeking food.
+    public SeekBehaviour foodSeek;
+
+    // the value to see how well nourished the animal is.
+    public float nourishedValue = 0.0F;
+
+    // the threshold that must passed for the entity to stop eating. 
+    public float fullThreshold = 80.0F;
+
+    // the value when the sheep is considered 'full'.
+    public float nourishedMax = 100.0F;
+
     // animal conditions
     [Header("Conditions")]
 
@@ -95,13 +109,10 @@ public abstract class Animal : Entity
     // used to make the animal reporduce.
     protected abstract void Reproduce();
 
-    // called when a living entity kills another entity, and passes in its victim.
-    public abstract void Kills(GameObject victim);
-
     // called when a living entity dies, and passes it its killer.
     // if the entity itself is passed, then the entity died of natural causes.
     // if null is passed, then it is unknown what killed the entity (possibly forcibly terminated).
-    public abstract void OnKilled(GameObject killer);
+    public abstract void OnDeath(GameObject killer);
 
 
     // Update is called once per frame
@@ -125,7 +136,26 @@ public abstract class Animal : Entity
                 birthTimer = 0.0F;
             }
         }
-        
+
+        // for nourishment.
+        if(nourishedValue > 0.0F)
+        {
+            // reduces nourishment value.
+            nourishedValue -= Time.deltaTime;
+
+            // bounds check.
+            if (nourishedValue < 0.0F)
+                nourishedValue = 0.0F;
+
+            // if the animal should be hungry.
+            if(nourishedValue < fullThreshold && foodSeek != null)
+            {
+                // look for food.
+                foodSeek.activeBehaviour = true;
+            }
+
+        }
+
         // checking for death
         // TODO: adjust life expectancy based on different factors.
         {
@@ -135,7 +165,7 @@ public abstract class Animal : Entity
 
         // if the age has reached the life expectancy or life span
         if (age >= lifeExpect || age >= lifeSpan)
-            OnKilled(gameObject); // has been killed.
+            OnDeath(gameObject); // has been killed.
     }
 
     // on destroy

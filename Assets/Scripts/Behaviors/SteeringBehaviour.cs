@@ -21,6 +21,9 @@ public abstract class SteeringBehaviour : MonoBehaviour
     // updates the behaviour
     public bool autoUpdateBehaviour = true;
 
+    // if 'true', this behaviour is active for automatic updates.
+    public bool activeBehaviour = true;
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -44,7 +47,7 @@ public abstract class SteeringBehaviour : MonoBehaviour
     protected void Update()
     {
         // if the behaviour shouldn't be updated.
-        if (autoUpdateBehaviour)
+        if (autoUpdateBehaviour && activeBehaviour)
         {
             UpdateBehaviour();
         }

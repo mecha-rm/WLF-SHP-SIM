@@ -30,14 +30,8 @@ public class Wolf : Animal
         wolf.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
-    // wolf has killed something (sheep)
-    public override void Kills(GameObject victim)
-    {
-        // throw new System.NotImplementedException();
-    }
-
     // wolf has been killed.
-    public override void OnKilled(GameObject killer)
+    public override void OnDeath(GameObject killer)
     {
         // throw new System.NotImplementedException();
     }

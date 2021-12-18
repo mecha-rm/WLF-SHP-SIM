@@ -71,8 +71,8 @@ public class PrioritizeBehaviours : MonoBehaviour
             // gets the current behaviour
             SteeringBehaviour behaviour = behaviours[i];
 
-            // the behaviour can be updated.
-            if(behaviour.UpdateAvailable())
+            // the behaviour can be updated, and said behaviour is active.
+            if(behaviour.UpdateAvailable() && behaviour.activeBehaviour)
             {
                 // priority of current behaviour.
                 int p = 0;

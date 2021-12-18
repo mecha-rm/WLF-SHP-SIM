@@ -97,7 +97,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6620634496259211091}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 370abf0281b12fd4cbded0c63f99dba2, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -117,7 +117,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &6620634496259211083
 MonoBehaviour:
@@ -131,10 +131,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402edb699350fc441aa020799cc771da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityName: 
+  description: 
   lifeSpan: 10
-  lifeExpect: 0
   age: 0
   aging: 1
+  birthTimer: 0
+  birthTimeMax: 5
+  foodSeek: {fileID: 6620634496259211081}
+  nourishedValue: 0
+  fullThreshold: 80
+  nourishedMax: 100
   sick: 0
 --- !u!114 &6620634496259211085
 MonoBehaviour:
@@ -169,6 +176,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 10
   autoUpdateBehaviour: 0
+  activeBehaviour: 1
   radius: 25
   randX: 1
   randY: 1
@@ -192,6 +200,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 500
   autoUpdateBehaviour: 0
+  activeBehaviour: 1
   threatTags: []
   view: {fileID: 6620634496259211084}
   threat: {fileID: 0}
@@ -211,6 +220,7 @@ MonoBehaviour:
   forceMode: 5
   speed: 500
   autoUpdateBehaviour: 0
+  activeBehaviour: 1
   targetTags:
   - Sheep
   view: {fileID: 6620634496259211084}
