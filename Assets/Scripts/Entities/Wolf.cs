@@ -2,18 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// the wolf object.
 public class Wolf : Animal
 {
-    // the life span as a static object.
-    // this is the same for all wolves.
-    private static int LIFE_SPAN = 100;
-
-    float time = 0.0F;
-
     // Start is called before the first frame update
     void Start()
     {
-        species = "wolf";
+        // species
+        species = "Wolf";
+
+        // entity name has not been set.
+        if (entityName == "")
+            entityName = "Wolf";
+
+        // the description has not been set.
+        if (description == "")
+            description = "Predatory species that kills sheep.";
     }
 
     // reproduces the wolf.
@@ -26,7 +30,7 @@ public class Wolf : Animal
         wolf.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
-    // wolf has killed something.
+    // wolf has killed something (sheep)
     public override void Kills(GameObject victim)
     {
         // throw new System.NotImplementedException();
@@ -43,13 +47,6 @@ public class Wolf : Animal
     protected void Update()
     {
         base.Update();
-
-        time += Time.deltaTime;
-        if(time > 5.0F)
-        {
-            Reproduce();
-            time = 0.0F;
-        }
             
     }
 }

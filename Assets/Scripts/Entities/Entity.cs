@@ -5,6 +5,10 @@ using UnityEngine;
 // entity for the game.
 public class Entity : MonoBehaviour
 {
+    // the name and description of the entities.
+    public string entityName = "";
+    public string description = "";
+
     // Start is called before the first frame update
     void Start()
     {

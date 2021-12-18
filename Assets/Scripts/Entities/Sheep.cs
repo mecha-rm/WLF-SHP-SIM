@@ -2,17 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// the sheep object.
 public class Sheep : Animal
 {
-    // the life span as a static object.
-    // this is the same for all sheep.
-    private static float LIFE_SPAN = 100.0F;
-
     // Start is called before the first frame update
     void Start()
     {
-        species = "sheep";
-        lifeSpan = LIFE_SPAN;
+        // if the speices has not been set.
+        if(species == "")
+            species = "sheep";
+
+        // entity name has not been set.
+        if (entityName == "")
+            entityName = "Sheep";
+
+        // the description has not been set.
+        if (description == "")
+            description = "Prey species that feeds on grass.";
+
     }
     
     // reproduces the sheep.
@@ -25,7 +32,7 @@ public class Sheep : Animal
         sheep.transform.position = transform.position + new Vector3(0.0F, 1.0F, 0.0F);
     }
 
-    // sheep has killed something.
+    // sheep has killed something (eaten grass).
     public override void Kills(GameObject victim)
     {
         // throw new System.NotImplementedException();

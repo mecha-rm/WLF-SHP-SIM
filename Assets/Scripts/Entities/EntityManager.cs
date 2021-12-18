@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// manages the different entities.s
+// manages the different entities.
+// TODO: maybe make this not a singleton?
 public class EntityManager
 {
     // instance of singleton
