@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: the sphere collider and the box collider trigger the same thing.
+// it's impossible to know which collider triggred what.
+// as such, the 'eat' collider and the 'behaviour' collider interfere with one another.
+// the behaviour collider is bigger, so it will win out everytime.
+// if continued, this needs to be fixed somehow.
+
 // animal behaviour
 public abstract class Animal : Entity
 {
@@ -106,8 +112,36 @@ public abstract class Animal : Entity
         age = (newAge >= 0.0F) ? newAge : age;
     }
 
+    // calculates the hunger
+    public void CalculateHunger()
+    {
+        // returned value.
+        bool hungry = false;
+
+        // caps value.
+        nourishedValue = Mathf.Clamp(nourishedValue, 0.0F, nourishedMax);
+
+        // checks result.
+        hungry = !(nourishedValue < fullThreshold);
+
+        // checks if hungry. If so, start looking for food. If not, stop.
+        if (hungry && foodSeek != null)
+            foodSeek.activeBehaviour = true;
+        else if (!hungry && foodSeek != null)
+            foodSeek.activeBehaviour = false;
+    }
+
+    // checks to see if the sheep is hungry.
+    public bool IsHungry()
+    {
+        return nourishedValue < fullThreshold;
+    }
+
     // used to make the animal reporduce.
     protected abstract void Reproduce();
+
+    // kills the animal.
+    public abstract void Kill();
 
     // called when a living entity dies, and passes it its killer.
     // if the entity itself is passed, then the entity died of natural causes.
@@ -146,14 +180,18 @@ public abstract class Animal : Entity
             // bounds check.
             if (nourishedValue < 0.0F)
                 nourishedValue = 0.0F;
+        }
 
-            // if the animal should be hungry.
-            if(nourishedValue < fullThreshold && foodSeek != null)
-            {
-                // look for food.
-                foodSeek.activeBehaviour = true;
-            }
-
+        // if the animal should be hungry.
+        if (nourishedValue < fullThreshold && foodSeek != null)
+        {
+            // look for food.
+            foodSeek.activeBehaviour = true;
+        }
+        else if (nourishedValue >= fullThreshold && foodSeek != null)
+        {
+            // not looking for food.
+            foodSeek.activeBehaviour = false;
         }
 
         // checking for death

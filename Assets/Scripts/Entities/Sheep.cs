@@ -52,36 +52,17 @@ public class Sheep : Animal
         // TODO: this value should not be hardcoded.
         nourishedValue += 10.0F;
 
-        // checks for hunger.
-        IsHungry();
+        // recalculate hunger value.
+        CalculateHunger();
 
         // tells grass its been eaten.
         grass.Eaten();
     }
-    
-    // calculates the hunger
-    public void CalculateHungry()
+
+    // kills the sheep.
+    public override void Kill()
     {
-        // returned value.
-        bool hungry = false;
-
-        // caps value.
-        nourishedValue = Mathf.Clamp(nourishedValue, 0.0F, nourishedMax);
-
-        // checks result.
-        hungry = !(nourishedValue < fullThreshold);
-
-        // checks if hungry. If so, start looking for food. If not, stop.
-        if (hungry && foodSeek != null)
-            foodSeek.activeBehaviour = true;
-        else if (!hungry && foodSeek != null)
-            foodSeek.activeBehaviour = false;
-    }
-
-    // checks to see if the sheep is hungry.
-    public bool IsHungry()
-    {
-        return nourishedValue < fullThreshold;
+        EntityManager.GetInstance().ReturnSheep(this);
     }
 
     // reproduces the sheep.
@@ -97,7 +78,8 @@ public class Sheep : Animal
     // sheep has been killed.
     public override void OnDeath(GameObject killer)
     {
-        // throw new System.NotImplementedException();
+        // returns the sheep to the pool.
+        EntityManager.GetInstance().ReturnSheep(this);
     }
 
     // Update is called once per frame

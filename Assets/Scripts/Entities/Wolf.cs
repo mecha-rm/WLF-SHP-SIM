@@ -20,6 +20,45 @@ public class Wolf : Animal
             description = "Predatory species that kills sheep.";
     }
 
+    // called when the sheep is colliding with something.
+    private void OnTriggerStay(Collider other)
+    {
+        // if the object is grass.
+        if (other.gameObject.tag == "Sheep" && IsHungry())
+        {
+            // grabs component.
+            Sheep sheep = other.gameObject.GetComponent<Sheep>();
+
+            // component found.
+            if (sheep != null)
+            {
+                // eat the sheep.
+                EatSheep(sheep);
+            }
+        }
+    }
+
+    // eats sheep.
+
+    public void EatSheep(Sheep sheep)
+    {
+        // adds to nourishment value.
+        // TODO: this value should not be hardcoded.
+        nourishedValue += 10.0F;
+
+        // recalculate hunger value.
+        CalculateHunger();
+
+        // kills sheep
+        sheep.Kill();
+    }
+
+    // kills the wolf.
+    public override void Kill()
+    {
+        EntityManager.GetInstance().ReturnWolf(this);
+    }
+
     // reproduces the wolf.
     protected override void Reproduce()
     {
@@ -33,7 +72,8 @@ public class Wolf : Animal
     // wolf has been killed.
     public override void OnDeath(GameObject killer)
     {
-        // throw new System.NotImplementedException();
+        // returns the wolf to the pool.
+        EntityManager.GetInstance().ReturnWolf(this);
     }
 
 

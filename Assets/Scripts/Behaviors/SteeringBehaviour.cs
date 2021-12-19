@@ -29,7 +29,7 @@ public abstract class SteeringBehaviour : MonoBehaviour
     {
         // finds the rigidbody
         if (rigidBody == null)
-            rigidBody = GetComponent<Rigidbody>();
+            rigidBody = gameObject.GetComponent<Rigidbody>();
 
         // adds rigidbody to item
         if (rigidBody == null)
