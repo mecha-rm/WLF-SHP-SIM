@@ -44,8 +44,14 @@ public class Sheep : Animal
         }
     }
 
+    // TODO: use to eat grass.
+    public override bool Eat()
+    {
+        throw new System.NotImplementedException();
+    }
+
     // eats grass.
-   
+
     public void EatGrass(Grass grass)
     {
         // adds to nourishment value.

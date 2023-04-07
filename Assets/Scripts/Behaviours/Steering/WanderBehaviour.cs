@@ -2,183 +2,144 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// wandering behaviour for object.
-public class WanderBehaviour : SteeringBehaviour
+namespace util
 {
-    // the radus of the wander circle
-    public float radius = 25.0F;
-
-    // position of the sphere
-    private Vector3 spherePos;
-
-    // the target's local position (relative to sphere).
-    private Vector3 targetPos;
-
-    // if 'true', these axis values are randomized. If false, these values are kept the same as the gameObject.
-    public bool randX = true;
-    public bool randY = true;
-    public bool randZ = true;
-
-    // the amount of time the entity moves in the same direction.
-    // when this amount of time has passed (using deltaTime), direction changes.
-    // this is done in seconds.
-    public float constCourseLength = 10.0F;
-
-    // elapsed course time
-    private float elapsedCourseTime = 0.0F;
-
-    // if set to true, the target instantly changes 
-    public bool instantCourseChange = false;
-
-    // the factor for how fast the course changes, i.e. target repositions itself.
-    // if it is set to 0 or less, it is not applied.
-    public float courseChangeSpeed = 1.0F;
-
-    // the target lerp value (0 - 1)
-    private float targetLerpT = 0.0F;
-
-    // position 0 and 1 for lerping.
-    private Vector3 targetLerpP0;
-    private Vector3 targetLerpP1;
-
-    // Start is called before the first frame update
-    protected override void Start()
+    // Wanders the area.
+    // TODO: wander is really buggy for some reason. Maybe have it seek a specific target instead?
+    public class WanderBehaviour : SteeringBehaviour
     {
-        // calls base.
-        base.Start();
-        
-        // absolute radius
-        radius = Mathf.Abs(radius);
+        [Header("Wander")]
+        // The time the object waits  (in seconds) to change its direction.
+        public float adjustTime = 50.0F;
 
-        // sphere position
-        spherePos = transform.position + transform.forward.normalized * radius;
-        
-        // target position
-        targetPos = spherePos + new Vector3(
-            Random.Range(-radius, radius),
-            Random.Range(-radius, radius),
-            Random.Range(-radius, radius)
-            );
+        // The timer for adjusting the forward direction of the object.
+        private float adjustTimer = 0.0F;
 
-        // save both target positions.
-        targetLerpP0 = targetPos;
-        targetLerpP1 = targetPos;
+        // The rotation axis for wandering.
+        public Vector3 rotAxis = Vector3.up;
 
-        // change direction on start
-        elapsedCourseTime = constCourseLength;
-    }
+        // The maximum rotation adjustment for the object for one cycle (in degrees).
+        public float adjustRotLimit = 30.0F;
 
-    // rotates a vector2 (uses degrees)
-    private Vector2 RotateVector2(Vector2 v, float a, bool inDegrees = true)
-    {
-        float theta = (inDegrees) ? a : a * Mathf.Rad2Deg;
+        // The adjustment range of the rotation.
+        // If set to 1 or 0, the rotation adjustment is set to max.
+        // If set beyond 1, then 
+        public int adjustRange = 10;
 
-        return new Vector2(
-            v.x * Mathf.Cos(theta) - v.y * Mathf.Sin(theta),
-            v.x * Mathf.Sin(theta) + v.y * Mathf.Cos(theta));
-    }
-
-    // returns the sphere position
-    public Vector3 GetSpherePosition()
-    {
-        return spherePos;
-    }
-
-    // returns the target position.
-    public Vector3 GetTargetPosition()
-    {
-        return targetPos;
-    }
-
-    // checks to see if the behaviour should be updated.
-    public override bool UpdateAvailable()
-    {
-        return true;
-    }
-
-    // updates the behaviour
-    public override void RunBehaviour()
-    {
-        // calculates sphere position relative to player
-        spherePos = transform.position + transform.forward.normalized * radius;
-
-        // the entity has gone in the same direction long enough, so change direction.
-        if(elapsedCourseTime >= constCourseLength)
+        // Start is called before the first frame update
+        protected override void Start()
         {
-            // randomizes the local target position within the sphere. 
-            // local target position
-            Vector3 localTargetPos = new Vector3(
-                Random.Range(-radius, radius),
-                Random.Range(-radius, radius),
-                Random.Range(-radius, radius)
-                );
+            base.Start();
 
-            // save old position.
-            targetLerpP0 = targetPos;
-
-            // save new position.
-            // gets new target position from local sphere position.
-            targetLerpP1 = spherePos + localTargetPos;
-
-            // new lerp to take place.
-            targetLerpT = 0.0F;
-
-            // snap to new position instantly.
-            if (instantCourseChange)
-            {
-                targetPos = targetLerpP1;
-            }
-            else // gradually change course.
-            {
-                targetLerpT += Time.deltaTime * courseChangeSpeed;
-                targetPos = Vector3.Lerp(targetLerpP0, targetLerpP1, targetLerpT); // automatically clamps
-            }
-                
-
-            // start timer over.
-            elapsedCourseTime = 0.0F;
-        }
-        else // keep going the same direction
-        {
-            elapsedCourseTime += Time.deltaTime;
-
-            // if the course change isn't instant.
-            if(!instantCourseChange)
-            {
-                targetLerpT += Time.deltaTime * courseChangeSpeed;
-                targetLerpT = Mathf.Clamp01(targetLerpT); // clamps value
-                targetPos = Vector3.Lerp(targetLerpP0, targetLerpP1, targetLerpT); // updates position
-            }            
+            // Applies a random rotation factor to start off.
+            transform.Rotate(rotAxis, Random.Range(0, 360));
         }
 
-        // clamp target position.
-        targetPos.x = Mathf.Clamp(targetPos.x, spherePos.x - radius, spherePos.x + radius);
-        targetPos.y = Mathf.Clamp(targetPos.y, spherePos.y - radius, spherePos.y + radius);
-        targetPos.z = Mathf.Clamp(targetPos.z, spherePos.z - radius, spherePos.z + radius);
+        // OnCollisionEnter is called when this collider/rigidbody has begun touching another collider/rigidbody.
+        private void OnCollisionEnter(Collision collision)
+        {
+            // Creates a ray.
+            Ray ray = new Ray(transform.position, transform.forward);
 
-        // if the x-value should not be randomized.
-        if (!randX)
-            targetPos.x = transform.position.x;
+            // The raycast distance (TODO: see if this is causing issues).
+            float rayDist = transform.localScale.magnitude * speed;
 
-        // if the y-value should not be randomized.
-        if (!randY)
-            targetPos.y = transform.position.y;
+            // Casts a ray foward. Its length is set to the object's velocity.
+            // rayDist = (rigidBody.velocity.magnitude == 0) ? 1 : rigidBody.velocity.magnitude;
 
-        // if the z-value should not be randomized.
-        if (!randZ)
-            targetPos.z = transform.position.z;
+            // If the ray distance is less than 1, set it to 1.
+            if (rayDist < 1)
+                rayDist = 1;
 
-        // look at the target
-        transform.LookAt(targetPos);
+            // Gets the raycast result.
+            bool raycastResult = Physics.Raycast(ray, rayDist);
 
-        // move in direction
-        rigidBody.AddForce(transform.forward * speed * Time.deltaTime, forceMode);
-    }
+            // If the way forward is blocked.
+            if(raycastResult)
+            {
+                // Reverse the movement direction.
+                // ApplyForce(-transform.forward);
 
-    // Update is called once per frame
-    protected override void Update()
-    {
-        // calls update. If set to do so, this will automatically call 'UpdateBehaviour'.
-        base.Update();
+                // Reverse the direction.
+                transform.Rotate(rotAxis, 90.0F); // 180
+
+                // Debug.Log("Rot Change Strong");
+            }
+
+            // TODO: optimize
+        }
+
+        // Adjust the movement direction.
+        private void AdjustDirection()
+        {
+            // The rotation angle.
+            float angle = 0.0F;
+
+            // The random max.
+            int randMax = adjustRange;
+
+            // Sets the rotation of the object.
+            if (randMax > 1)
+                angle = adjustRotLimit / Random.Range(1, randMax + 1);
+            else
+                angle = adjustRotLimit;
+
+            // Rotate by the set angle.
+            transform.Rotate(rotAxis, angle);
+        }
+
+        // Runs the flee behaviour.
+        public override void RunBehaviour()
+        {
+            // Go in the current direction.
+            Vector3 distVec = transform.forward;
+
+            // Projects a target in front of the entity.
+            distVec.Scale(transform.localScale);
+            distVec *= 10.0F;
+
+            // If the x-value should remain the same.
+            if (rotAxis.x == 1.0F)
+                distVec.x = transform.position.x;
+
+            // If the y-value should remain the same.
+            if (rotAxis.y == 1.0F)
+                distVec.y = transform.position.y;
+
+            // If the z-value should remain the same.
+            if (rotAxis.z == 1.0F)
+                distVec.z = transform.position.z;
+
+            // If the distance vector is now equal to the object's position, set it to the object's forward vector.
+            if (distVec == transform.position)
+                distVec = transform.forward;
+
+            // Applies force.
+            ApplyForce(distVec);
+        }
+
+        // Update is called once per frame
+        protected override void Update()
+        {
+            // If the behaviour is running.
+            if(runBehaviour)
+            {
+                // Reduce the timer.
+                adjustTimer -= Time.deltaTime;
+
+                // If the timer is less than or equal to 0.
+                if(adjustTimer <= 0)
+                {
+                    // Adjust the direction.
+                    AdjustDirection();
+
+                    // Reset the timer.
+                    adjustTimer = adjustTime;
+                }
+            }
+
+            // Runs the behaviour.
+            base.Update();
+        }
     }
 }

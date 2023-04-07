@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using util;
 
 // TODO: the sphere collider and the box collider trigger the same thing.
 // it's impossible to know which collider triggred what.
@@ -16,6 +17,15 @@ public abstract class Animal : Entity
 
     // sex of the living thing
     public enum sex { unknown, male, female }
+
+    // These variables are used to prioritize different actions.
+    protected int foodPriority = 3; // Prioritize eating.
+    protected GameObject food; // Target to go towards.
+
+    protected int threatPriority = 2; // Prioritize fleeing.
+    protected GameObject threat; // Target to flee from.
+
+    protected int wanderPriority = 1; // Prioritize wandering.
 
     // the variables concerning animal life times.
     [Header("Life Time")]
@@ -50,9 +60,6 @@ public abstract class Animal : Entity
 
     [Header("Eating")]
 
-    // behaviour for seeking food.
-    public SeekBehaviour foodSeek;
-
     // the value to see how well nourished the animal is.
     public float nourishedValue = 0.0F;
 
@@ -61,11 +68,6 @@ public abstract class Animal : Entity
 
     // the value when the sheep is considered 'full'.
     public float nourishedMax = 100.0F;
-
-    [Header("Fleeing")]
-
-    // Used to flee a threat.
-    public FleeBehaviour threatFlee;
 
     // animal conditions
     [Header("Conditions")]
@@ -130,10 +132,11 @@ public abstract class Animal : Entity
         hungry = !(nourishedValue < fullThreshold);
 
         // checks if hungry. If so, start looking for food. If not, stop.
-        if (hungry && foodSeek != null)
-            foodSeek.runBehaviour = true;
-        else if (!hungry && foodSeek != null)
-            foodSeek.runBehaviour = false;
+        // TODO: change priority based on how hungry the entity is.
+        if (hungry)
+            foodPriority = 3;
+        else if (!hungry)
+            foodPriority = 0;
     }
 
     // checks to see if the sheep is hungry.
@@ -141,6 +144,9 @@ public abstract class Animal : Entity
     {
         return nourishedValue < fullThreshold;
     }
+
+    // Attempts to have the animal eat.
+    public abstract bool Eat();
 
     // used to make the animal reporduce.
     protected abstract void Reproduce();
@@ -178,7 +184,7 @@ public abstract class Animal : Entity
         if (aging)
             age += Time.deltaTime;
 
-        // for giving birth.
+        // for giving birth. (TODO: have breeding component)
         {
             // increments birth timer.
             birthTimer += Time.deltaTime;
@@ -202,28 +208,41 @@ public abstract class Animal : Entity
                 nourishedValue = 0.0F;
         }
 
-        // if the animal should be hungry.
-        if (nourishedValue < fullThreshold && foodSeek != null)
-        {
-            // look for food.
-            foodSeek.runBehaviour = true;
-        }
-        else if (nourishedValue >= fullThreshold && foodSeek != null)
-        {
-            // not looking for food.
-            foodSeek.runBehaviour = false;
-        }
-
         // checking for death
         // TODO: adjust life expectancy based on different factors.
         {
             lifeExpect = lifeSpan;
         }
-        
+
 
         // if the age has reached the life expectancy or life span
         if (age >= lifeExpect || age >= lifeSpan)
             OnDeath(gameObject); // has been killed.
+
+
+        // STEERING BEHAVIOURS
+        // Calculate how hungry the entity is.
+        CalculateHunger();
+
+        // Checks to find which behaviour has the highest value.
+        int maxBehaviour = Mathf.Max(foodPriority, threatPriority, wanderPriority);
+
+
+        // If food should be prioritized, and the entity is hungry.
+        if(maxBehaviour == foodPriority && IsHungry())
+        {
+            // Tries to seek the food.
+            Seek(food);
+        }
+        // Prioritize escaping the threat.
+        else if(maxBehaviour == threatPriority)
+        {
+            Flee(threat);
+        }
+        else // Wander
+        {
+            Wander();
+        }
     }
 
     // on destroy

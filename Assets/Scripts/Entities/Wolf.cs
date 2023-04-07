@@ -38,6 +38,12 @@ public class Wolf : Animal
         }
     }
 
+    // TODO: use to eat sheep.
+    public override bool Eat()
+    {
+        throw new System.NotImplementedException();
+    }
+
     // eats sheep.
 
     public void EatSheep(Sheep sheep)

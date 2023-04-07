@@ -14,10 +14,6 @@ GameObject:
   - component: {fileID: 6620634496259211093}
   - component: {fileID: 6620634496259211080}
   - component: {fileID: 6620634496259211083}
-  - component: {fileID: 6620634496259211085}
-  - component: {fileID: 6620634496259211082}
-  - component: {fileID: 6620634496259211081}
-  - component: {fileID: 6620634496259211086}
   - component: {fileID: 6620634496259211084}
   m_Layer: 0
   m_Name: Wolf (Box)
@@ -139,94 +135,10 @@ MonoBehaviour:
   aging: 1
   birthTimer: 0
   birthTimeMax: 5
-  foodSeek: {fileID: 6620634496259211081}
   nourishedValue: 0
   fullThreshold: 80
   nourishedMax: 100
-  threatFlee: {fileID: 0}
   sick: 0
---- !u!114 &6620634496259211085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6620634496259211091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6480a88086951c84985d508ffe153a02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  behaviours:
-  - {fileID: 6620634496259211086}
-  - {fileID: 6620634496259211081}
-  - {fileID: 6620634496259211082}
-  priorities: 0000000001000000
---- !u!114 &6620634496259211082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6620634496259211091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ba1bfc74dbfc0947909a6f9faf9ec29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidBody: {fileID: 6620634496259211080}
-  forceMode: 5
-  speed: 10
-  applyDeltaTime: 1
-  runBehaviour: 1
-  radius: 25
-  randX: 1
-  randY: 1
-  randZ: 1
-  constCourseLength: 10
-  instantCourseChange: 0
-  courseChangeSpeed: 1
---- !u!114 &6620634496259211081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6620634496259211091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 659639165ade0f94aaa0e2b3638c0d29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidBody: {fileID: 6620634496259211080}
-  forceMode: 5
-  speed: 500
-  applyDeltaTime: 1
-  runBehaviour: 1
-  targetTags:
-  - Sheep
-  view: {fileID: 6620634496259211084}
-  target: {fileID: 0}
---- !u!114 &6620634496259211086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6620634496259211091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a4d9a76701cfdc4c873835f2571ff0f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rigidBody: {fileID: 6620634496259211080}
-  forceMode: 5
-  speed: 500
-  applyDeltaTime: 1
-  runBehaviour: 1
-  threatTags: []
-  view: {fileID: 6620634496259211084}
-  threat: {fileID: 0}
 --- !u!135 &6620634496259211084
 SphereCollider:
   m_ObjectHideFlags: 0
