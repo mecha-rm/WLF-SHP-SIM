@@ -97,7 +97,7 @@ public class WanderBehaviour : SteeringBehaviour
     }
 
     // updates the behaviour
-    public override void UpdateBehaviour()
+    public override void RunBehaviour()
     {
         // calculates sphere position relative to player
         spherePos = transform.position + transform.forward.normalized * radius;
@@ -176,7 +176,7 @@ public class WanderBehaviour : SteeringBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         // calls update. If set to do so, this will automatically call 'UpdateBehaviour'.
         base.Update();

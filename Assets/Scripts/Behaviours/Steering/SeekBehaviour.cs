@@ -5,7 +5,7 @@ using UnityEngine;
 // seeks an behaviour
 public class SeekBehaviour : SteeringBehaviour
 {
-    // tags of objects recognized as threats
+    // tags of objects recognized as targets
     public List<string> targetTags = new List<string>();
 
     // view for seeking items
@@ -36,15 +36,19 @@ public class SeekBehaviour : SteeringBehaviour
         
     }
 
-    // potential target is in the view
+    // Potential target is in the view
     private void OnTriggerStay(Collider other)
     {
-        // sets new target.
-        if (target == null && targetTags.Contains(other.tag))
+        // Gets the current distance and other distance.
+        float currDist = (target != null) ? (target.transform.position - transform.position).magnitude : -1;
+        float otherDist = (other.transform.position - transform.position).magnitude;
+        
+        // Checks if a new target should be set. Checks if the new target is closer, or if the target is not set.
+        if(otherDist < currDist || target == null)
         {
+            // TODO: check object priority.
             target = other.gameObject;
-        }
-            
+        }   
     }
 
     // target has left range.
@@ -55,15 +59,15 @@ public class SeekBehaviour : SteeringBehaviour
             target = null;
     }
 
-    // checks to see if the behaviour should be updated.
+    // Checks to see if the behaviour should be updated.
     public override bool UpdateAvailable()
     {
         // if currently seeking a target, update.
         return (target != null);
     }
 
-    // updates the behaviour
-    public override void UpdateBehaviour()
+    // Updates the behaviour
+    public override void RunBehaviour()
     {
         // target is set.
         if (target != null)
@@ -78,7 +82,7 @@ public class SeekBehaviour : SteeringBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         // calls update. If set to do so, this will automatically call 'UpdateBehaviour'.
         base.Update();

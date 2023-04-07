@@ -72,7 +72,7 @@ public class PrioritizeBehaviours : MonoBehaviour
             SteeringBehaviour behaviour = behaviours[i];
 
             // the behaviour can be updated, and said behaviour is active.
-            if(behaviour.UpdateAvailable() && behaviour.activeBehaviour)
+            if(behaviour.UpdateAvailable() && behaviour.runBehaviour)
             {
                 // priority of current behaviour.
                 int p = 0;
@@ -113,7 +113,7 @@ public class PrioritizeBehaviours : MonoBehaviour
         {
             SteeringBehaviour sb = actions.Peek(); // get front.
             actions.Dequeue(); // remove front.
-            sb.UpdateBehaviour(); // updates behaviour
+            sb.RunBehaviour(); // updates behaviour
 
         }
     }

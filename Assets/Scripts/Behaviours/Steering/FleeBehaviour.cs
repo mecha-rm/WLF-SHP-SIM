@@ -36,18 +36,22 @@ public class FleeBehaviour : SteeringBehaviour
 
     }
 
-    // potential threat is in the view
+    // Potential threat is in the view
     private void OnTriggerStay(Collider other)
     {
-        // sets new threat.
-        if (threat == null && threatTags.Contains(other.tag))
+        // Gets the current distance and other distance.
+        float currDist = (threat != null) ? (threat.transform.position - transform.position).magnitude : -1;
+        float otherDist = (other.transform.position - transform.position).magnitude;
+
+        // Checks if a new threat should be set. Checks if the new threat is closer, or if the threat is not set.
+        if (otherDist < currDist || threat == null)
         {
+            // TODO: check object priority.
             threat = other.gameObject;
         }
-
     }
 
-    // has escaped threat
+    // threat has left range.
     private void OnTriggerExit(Collider other)
     {
         // threat is now set to null.
@@ -63,7 +67,7 @@ public class FleeBehaviour : SteeringBehaviour
     }
 
     // updates the behaviour
-    public override void UpdateBehaviour()
+    public override void RunBehaviour()
     {
         // target is set.
         if (threat != null)
@@ -78,7 +82,7 @@ public class FleeBehaviour : SteeringBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         // calls update. If set to do so, this will automatically call 'UpdateBehaviour'.
         base.Update();

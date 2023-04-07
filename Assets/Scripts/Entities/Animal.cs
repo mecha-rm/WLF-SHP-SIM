@@ -62,6 +62,11 @@ public abstract class Animal : Entity
     // the value when the sheep is considered 'full'.
     public float nourishedMax = 100.0F;
 
+    [Header("Fleeing")]
+
+    // Used to flee a threat.
+    public FleeBehaviour threatFlee;
+
     // animal conditions
     [Header("Conditions")]
 
@@ -70,7 +75,7 @@ public abstract class Animal : Entity
     public bool sick = false;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
 
     }
@@ -126,9 +131,9 @@ public abstract class Animal : Entity
 
         // checks if hungry. If so, start looking for food. If not, stop.
         if (hungry && foodSeek != null)
-            foodSeek.activeBehaviour = true;
+            foodSeek.runBehaviour = true;
         else if (!hungry && foodSeek != null)
-            foodSeek.activeBehaviour = false;
+            foodSeek.runBehaviour = false;
     }
 
     // checks to see if the sheep is hungry.
@@ -148,9 +153,24 @@ public abstract class Animal : Entity
     // if null is passed, then it is unknown what killed the entity (possibly forcibly terminated).
     public abstract void OnDeath(GameObject killer);
 
+    // STEERING BEHAVIOURS
+    public void Seek(GameObject target)
+    {
+
+    }
+
+    public void Flee(GameObject threat)
+    {
+
+    }
+
+    public void Wander()
+    {
+
+    }
 
     // Update is called once per frame
-    protected void Update()
+    protected override void Update()
     {
         base.Update();
 
@@ -186,12 +206,12 @@ public abstract class Animal : Entity
         if (nourishedValue < fullThreshold && foodSeek != null)
         {
             // look for food.
-            foodSeek.activeBehaviour = true;
+            foodSeek.runBehaviour = true;
         }
         else if (nourishedValue >= fullThreshold && foodSeek != null)
         {
             // not looking for food.
-            foodSeek.activeBehaviour = false;
+            foodSeek.runBehaviour = false;
         }
 
         // checking for death

@@ -6,7 +6,7 @@ using UnityEngine;
 public class Wolf : Animal
 {
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         // species
         species = "Wolf";
@@ -78,7 +78,7 @@ public class Wolf : Animal
 
 
     // Update is called once per frame
-    protected void Update()
+    protected override void Update()
     {
         base.Update();
             
