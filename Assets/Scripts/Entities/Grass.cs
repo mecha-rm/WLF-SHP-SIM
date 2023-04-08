@@ -19,7 +19,7 @@ public class Grass : Entity
     public float growthTimeMax = 10.0F;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         // if the entity name is blank.
         if(entityName == "")
@@ -46,6 +46,8 @@ public class Grass : Entity
             }
             
         }
+
+        base.Start();
     }
 
     // if this full grown grass?

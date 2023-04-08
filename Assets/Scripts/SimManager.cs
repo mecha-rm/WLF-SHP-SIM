@@ -6,6 +6,9 @@ using UnityEngine.UI;
 // management for the simulator.
 public class SimManager : MonoBehaviour
 {
+    // instance of singleton
+    private static SimManager instance = null;
+
     [Header("User Interface")]
     // rate for updating UI
     // public float updateRate = 1.0F;
@@ -23,12 +26,48 @@ public class SimManager : MonoBehaviour
     public Text sheepCountText;
     public Text wolfCountText;
 
+    // constructor
+    private SimManager()
+    {
+        // ...
+    }
+
+    // Awake is called when the script instance is being loaded.
+    private void Awake()
+    {
+        // Instance not set.
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else // Instance already set.
+        {
+            // Only one instance allowed.
+            if (instance != this)
+                Destroy(this);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
-    
+
+    // gets the instance
+    public static SimManager GetInstance()
+    {
+        // no instance generated
+        if (instance == null)
+        {
+            // Generates instance.
+            GameObject newObject = new GameObject("Sim Manager (singleton)");
+            instance = newObject.AddComponent<SimManager>();
+        }
+
+        return instance;
+    }
+
     // updates the canvas.
     public void UpdateCanvas()
     {

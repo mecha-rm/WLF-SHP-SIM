@@ -7,7 +7,7 @@ PhysicMaterial:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sheep Physic Material
-  dynamicFriction: 0.03
+  dynamicFriction: 0.05
   staticFriction: 0.015
   bounciness: 0
   frictionCombine: 0

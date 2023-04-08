@@ -1955,6 +1955,7 @@ GameObject:
   - component: {fileID: 1369971494}
   - component: {fileID: 1369971493}
   - component: {fileID: 1369971495}
+  - component: {fileID: 1369971496}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -2009,6 +2010,24 @@ MonoBehaviour:
   grassCountText: {fileID: 362859830}
   sheepCountText: {fileID: 2139357211}
   wolfCountText: {fileID: 1715831499}
+--- !u!114 &1369971496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369971492}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18400cfae2f920049ad0c42ba26f761c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sheepPrefab: {fileID: 1063144697243864, guid: 29ca9feed611c394da007c6109f06260, type: 3}
+  sheepPrefabRes: Prefabs/Entities/Sheep (Box)
+  wolfPrefab: {fileID: 6620634496259211091, guid: 5778c4c0638dbd240be5ec008ceb095f, type: 3}
+  wolfPrefabRes: Prefabs/Entities/Wolf (Box)
+  grassPrefab: {fileID: 8740162727758233860, guid: 834165699a16cb5459a257e953802df2, type: 3}
+  grassPrefabRes: Prefabs/Entities/Grass (Box)
 --- !u!1 &1462133449
 GameObject:
   m_ObjectHideFlags: 0

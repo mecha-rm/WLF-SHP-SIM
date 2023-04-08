@@ -13,8 +13,13 @@ GameObject:
   - component: {fileID: 1063144697243879}
   - component: {fileID: 1063144697243878}
   - component: {fileID: 1063144697243877}
-  - component: {fileID: 1063144697243872}
   - component: {fileID: 1063144697243873}
+  - component: {fileID: 1063144697243872}
+  - component: {fileID: 7350171287047784225}
+  - component: {fileID: 2740835980543421545}
+  - component: {fileID: -4754767945476946235}
+  - component: {fileID: 2453461802610517508}
+  - component: {fileID: -8635099197528539750}
   m_Layer: 0
   m_Name: Sheep (Box)
   m_TagString: Sheep
@@ -30,7 +35,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063144697243864}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,6 +121,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!135 &1063144697243873
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063144697243864}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 15
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1063144697243872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,29 +146,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e8f36f552b35144a9795987d64bbb3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityName: 
-  description: 
-  lifeSpan: 10
+  entityName: Sheep
+  description: Small, fluffy animal that eats grass.
+  seek: {fileID: 7350171287047784225}
+  pursue: {fileID: 0}
+  flee: {fileID: -4754767945476946235}
+  evade: {fileID: 0}
+  wander: {fileID: -8635099197528539750}
+  speed: 5
+  forceMode: 0
+  lifeSpan: 300
   age: 0
   aging: 1
   birthTimer: 0
-  birthTimeMax: 5
-  foodSeek: {fileID: 0}
+  birthTimeMax: 75
   nourishedValue: 0
-  fullThreshold: 80
-  nourishedMax: 100
-  threatFlee: {fileID: 0}
+  nourishedEatInc: 5
+  fullThreshold: 15
+  nourishedMax: 20
   sick: 0
---- !u!135 &1063144697243873
-SphereCollider:
+--- !u!114 &7350171287047784225
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063144697243864}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 10
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659639165ade0f94aaa0e2b3638c0d29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 1
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 0}
+--- !u!114 &2740835980543421545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063144697243864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb9b0584cab55149a46936ef6d49d98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 0
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 0}
+--- !u!114 &-4754767945476946235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063144697243864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4d9a76701cfdc4c873835f2571ff0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 1
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 0}
+--- !u!114 &2453461802610517508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063144697243864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f1456e84e376d408237ef930471dcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 0
+  speed: 100
+  applyDeltaTime: 1
+  target: {fileID: 0}
+--- !u!114 &-8635099197528539750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063144697243864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba1bfc74dbfc0947909a6f9faf9ec29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runBehaviour: 0
+  rigidBody: {fileID: 0}
+  forceMode: 1
+  speed: 100
+  applyDeltaTime: 1
+  adjustTime: 50
+  rotAxis: {x: 0, y: 1, z: 0}
+  adjustRotLimit: 30
+  adjustRange: 10
